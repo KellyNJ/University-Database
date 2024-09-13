@@ -4,3 +4,4 @@ Date:		Time:			Activity:
 9/13/2024	4:34 PM			Imported the original database in repo for editing
 9/13/2024	7:09 PM			Used CAT command to create new DB file; created the revision plan
 9/13/2024	7:43 PM			Finished updating new table to reflect the entire DB, will test in Progammiz
+9/13/2024	7:55 PM			Testing failed: Had duplicate prereq table and no classroom table
