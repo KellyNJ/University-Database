@@ -2,3 +2,4 @@ Repo Hist
 
 Date:		Time:			Activity:
 9/13/2024	4:34 PM			Imported the original database in repo for editing
+9/13/2024	7:09 PM			Used CAT command to create new DB file; created the revision plan

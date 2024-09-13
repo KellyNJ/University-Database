@@ -1,0 +1,46 @@
+Tables in the Diagram:
+- takes
+- student
+- advisor
+- department
+- instructor
+- prereq
+- course
+- time_slot
+- teaches
+- classroom
+- section
+* 11 tables total
+
+
+Tables missing in the University DB:
+- advisor
+- time_slot
+- classroom
+* Missing 3 tables
+
+
+Three tables need to be created:
+
+advisor:
+s_id
+i_id
+
+time_slot:
+time_slot_id
+day
+start_time
+end_time
+
+classroom:
+building
+room_number
+capacity
+
+Syntax improvement:
+- drop table <INSERT TABLE NAME> --> drop table if exists <INSERT TABLE NAME>
+
+Needed changes to adapt DB:
+* Objective: To complete the University DB -- all relations should be added with foreign key constraints based on the diagram (Slide 9)
+- Add the 3 tables stated above
+- Add FKCs to enforce referential integrity
