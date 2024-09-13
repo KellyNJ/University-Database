@@ -1,12 +1,16 @@
-drop table takes;
-drop table teaches;
-drop table section;
-drop table student;
-drop table prereq;
-drop table instructor;
-drop table department;
-drop table course;
-
+/*Reset code -- runs to keep the DB clean and organized*/
+/*Has been revised to include the 3 new tables*/
+drop table if exists takes;
+drop table if exists teaches;
+drop table if exists section;
+drop table if exists student;
+drop table if exists prereq;
+drop table if exists instructor;
+drop table if exists department;
+drop table if exists course;
+drop table if exists advisor;
+drop table if exists time_slot;
+drop table if exists classroom;
 
 /*Start the table creation process*/
 create table department(
@@ -45,6 +49,20 @@ prereq_id varchar(20),
 primary key (course_id),
 foreign key (course_id) references course);
 
+create table prereq(
+course_id varchar(7),
+prereq_id varchar(7),
+primary key (course_id, prereq_id),
+foreign key (course_id) references course,
+foreign key (prereq_id) references course,
+
+create table time_slot(
+time_slot_id varchar(4),
+day varchar(1),
+start_time time,
+end_time time,
+primary key (time_slot_id, day, start_time));
+
 create table section(
 course_id varchar(20),
 sec_id numeric(1,0),
@@ -54,7 +72,9 @@ building varchar(20),
 room_number numeric(4,0),
 time_slot_id char,
 primary key (course_id, sec_id, semester,year),
-foreign key (course_id) references course);
+foreign key (course_id) references course),
+foreign key (building, room_number) references classroom,
+foreign key (time_slot_id) references time_slot);
 
 create table takes(
 ID varchar(5),
@@ -73,15 +93,24 @@ course_id varchar(20),
 sec_id numeric(1,0),
 semester varchar(6),
 year numeric(4,0),
-primary key (ID, course_id, sec_id, semester,year),
-foreign key(course_id, sec_id, semester, year) references section,
-foreign key(ID) references instructor);
+primary key (ID, course_id, sec_id, semester, year),
+foreign key (course_id, sec_id, semester, year) references section,
+foreign key (ID) references instructor);
+
+create table advisor(
+s_ID varchar(5)
+i_ID varchar(5)
+primary key (s_ID),
+foreign key(s_ID) references student,
+foreign key(i_ID) references instructor);
+
+
 
 /*end db table creation */
 
 /*start inserting tuples, which should be done in the same order as the table creation to ensure no foreign key constraints are violated*/
 
-/* Department */
+/*Department:*/
 insert into department values ('Biology', 'Watson', 90000);
 insert into department values ('Comp. Sci.', 'Taylor', 100000);
 insert into department values ('Elec. Eng.', 'Taylor', 85000);
@@ -90,7 +119,7 @@ insert into department values ('History', 'Painter', 50000);
 insert into department values ('Music', 'Packard', 80000);
 insert into department values ('Physics', 'Watson', 70000);
 
-/*Student*/
+/*Student:*/
 insert into student values ('00128', 'Zhang', 'Comp. Sci.', 102);
 insert into student values ('12345', 'Shankar', 'Comp. Sci.', 32);
 insert into student values ('19991', 'Brandt', 'History', 80);
@@ -106,7 +135,7 @@ insert into student values ('98765', 'Bourikas', 'Elec. Eng.', 98);
 insert into student values ('98988', 'Tanaka', 'Biology', 120);
 
 
-/*instructor*/
+/*Instructor:*/
 
 insert into instructor values ('10101', 'Srinivasan','Comp. Sci.', 65000);
 insert into instructor values ('12121', 'Wu','Finance', 90000);
@@ -121,7 +150,7 @@ insert into instructor values ('76766', 'Crick','Biology', 72000);
 insert into instructor values ('83821', 'Brandt','Comp. Sci.', 92000);
 insert into instructor values ('98345', 'Kim','Elec. Eng.', 80000);
 
-/*Course */
+/*Course:*/
 
 insert into course values ('BIO-101', 'Intro to Biology', 'Biology', 4);
 insert into course values ('BIO-301', 'Genetics', 'Biology', 4);
@@ -137,7 +166,7 @@ insert into course values ('HIS-351', 'World History', 'History', 3);
 insert into course values ('MU-199', 'Music Video Production', 'Music', 3);
 insert into course values ('PHY-101', 'Physical Principles', 'Physics', 4);
 
-/* Prereq: */
+/*Prereq:*/
 
 insert into prereq values ('BIO-301', 'BIO-101');
 insert into prereq values ('BIO-399', 'BIO-101');
@@ -147,7 +176,36 @@ insert into prereq values ('CS-319', 'CS-101');
 insert into prereq values ('CS-347', 'CS-101');
 insert into prereq values ('EE-181', 'PHY-101'); 
 
-/*Section*/
+/*Classroom:*/
+insert into classroom values ('Packard', '101', 500);
+insert into classroom values ('Painter', '309', 12);
+insert into classroom values ('Taylor', '403', 70);
+insert into classroom values ('Watson', '169', 47);
+insert into classroom values ('Watson', '202', 10);
+
+/*Time_Slot:*/
+insert into time_slot values ('A', 'M', '8:00', '8:50');
+insert into time_slot values ('A', 'W', '8:00', '8:50');
+insert into time_slot values ('A', 'F', '8:00', '8:50');
+insert into time_slot values ('B', 'M', '9:00', '9:50');
+insert into time_slot values ('B', 'W', '9:00', '9:50');
+insert into time_slot values ('B', 'F', '9:00', '9:50');
+insert into time_slot values ('C', 'M', '11:00', '11:50');
+insert into time_slot values ('C', 'W', '11:00', '11:50');
+insert into time_slot values ('C', 'F', '11:00', '11:50');
+insert into time_slot values ('D', 'M', '13:00', '13:50');
+insert into time_slot values ('D', 'W', '13:00', '13:50');
+insert into time_slot values ('D', 'F', '13:00', '13:50');
+insert into time_slot values ('E', 'T', '10:30', '11:45');
+insert into time_slot values ('E', 'R', '10:30', '11:45');
+insert into time_slot values ('F', 'T', '14:30', '15:45');
+insert into time_slot values ('F', 'R', '14:30', '15:45');
+insert into time_slot values ('G', 'M', '16:00', '16:50');
+insert into time_slot values ('G', 'W', '16:00', '16:50');
+insert into time_slot values ('G', 'F', '16:00', '16:50');
+insert into time_slot values ('H', 'W', '10:00', '12:30');
+
+/*Section:*/
 insert into section values ('BIO-101', 1, 'Summer', 2017, 'Painter', 514, 'B');
 insert into section values ('BIO-301', 1, 'Summer', 2018, 'Painter', 514, 'A');
 insert into section values ('CS-101', 1, 'Fall', 2017, 'Packard', 101, 'H');
@@ -164,7 +222,7 @@ insert into section values('EE-181', 1, 'Spring', 2017, 'Taylor', 3128, 'C');
 insert into section values('CS-347', 1, 'Fall', 2017, 'Taylor', 3128, 'A');
 insert into section values('CS-319', 2, 'Spring', 2018, 'Taylor', 3128, 'C');
 
-/*Takes*/
+/*Takes:*/
 insert into takes values ('00128', 'CS-101', '1', 'Fall', 2017, 'A');
 insert into takes values('00128', 'CS-347', '1', 'Fall', 2017, 'A');
 insert into takes values('12345', 'CS-101', '1', 'Fall', 2017, 'C');
@@ -188,7 +246,7 @@ insert into takes values('98765', 'CS-315', '1', 'Spring', 2018, 'B');
 insert into takes values('98988', 'BIO-101', '1', 'Summer', 2017, 'A');
 insert into takes values('98988', 'BIO-301', '1', 'Summer', 2018, 'null');
 
-/*Teaches*/
+/*Teaches:*/
 Insert into teaches values ('10101', 'CS-101', 1 , 'Fall', 2017);
 Insert into teaches values ('10101','CS-315', 1, 'Spring', 2018);
 Insert into teaches values ('10101', 'CS-347', 1, 'Fall', 2017);
@@ -204,3 +262,14 @@ Insert into teaches values ('83821', 'CS-190', 1, 'Spring', 2017);
 Insert into teaches values ('83821', 'CS-190', 2, 'Spring', 2017);
 Insert into teaches values ('83821', 'CS-319', 2, 'Spring', 2018);
 Insert into teaches values ('98345', 'EE-181', 1, 'Spring', 2017);
+
+/*Advisor:*/
+insert into advisor values ('00128', '45565');
+insert into advisor values ('12345', '10101');
+insert into advisor values ('23121', '76543');
+insert into advisor values ('44553', '22222');
+insert into advisor values ('45678', '22222');
+insert into advisor values ('76543', '45565');
+insert into advisor values ('76653', '98345');
+insert into advisor values ('98765', '98345');
+insert into advisor values ('98988', '76766');
