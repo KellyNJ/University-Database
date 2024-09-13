@@ -72,7 +72,7 @@ building varchar(20),
 room_number numeric(4,0),
 time_slot_id char,
 primary key (course_id, sec_id, semester,year),
-foreign key (course_id) references course),
+foreign key (course_id) references course,
 foreign key (building, room_number) references classroom,
 foreign key (time_slot_id) references time_slot);
 
