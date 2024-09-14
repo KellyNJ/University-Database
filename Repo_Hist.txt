@@ -6,3 +6,6 @@ Date:		Time:			Activity:
 9/13/2024	7:43 PM			Finished updating new table to reflect the entire DB, will test in Progammiz
 9/13/2024	7:55 PM			Testing failed: Had duplicate prereq table and no classroom table
 9/13/2024	7:58 PM			Testing failed: Syntax error @ line 75 -- extra )
+9/14/2024	1:18 AM			Read text on how foreign key constraints worked and adjusted code as needed
+
+Code successfully runs and creates all tables according to the diagram.
